@@ -70,8 +70,7 @@
                     this.canvasWidth / 2,
                     this.canvasHeight / 2 + 100
                 ]);
-
-            this.drawTurtle();
+            this.drawCanvas();
         },
         methods: {
 
@@ -97,6 +96,10 @@
                 const color = this.getColorToneInHex(level, this.tree.depth);
                 this.turtle.move(size);
                 [
+                    // Try this three branches
+                    // [50, 0.5],
+                    // [-55, 0.4],
+                    // [7, 0.80]
                     [this.tree.angle1, this.tree.grow1],
                     [this.tree.angle2, this.tree.grow2]
                 ].forEach(([angle, grow]) => {
@@ -110,7 +113,7 @@
                 this.turtle.hide();
             },
 
-            drawTurtle(): void {
+            drawCanvas(): void {
                 this.clearCanvas();
                 this.recalculateParameters();
                 this.turtle.reset();
