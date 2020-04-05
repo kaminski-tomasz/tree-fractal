@@ -75,10 +75,9 @@
         methods: {
 
             getColorToneInHex(level: number, maxDepth: number): string {
-                const minFraction = 0.05;
-                const colorTone = Math.round(minFraction * 255.0 + (1 - minFraction) * 255.0 * (level / (maxDepth)));
-                const toneInHex = (colorTone < 16 ? '0' : '') + colorTone.toString(16).toUpperCase();
-                return `#${toneInHex}${toneInHex}${toneInHex}`;
+                const minFraction = 0.06;
+                const opacity = minFraction + (1 - minFraction) * (level / maxDepth);
+                return `rgba(255, 255, 255, ${opacity})`;
             },
 
             recalculateParameters(): void {
@@ -121,7 +120,7 @@
                 this.turtle.turn(-90);
                 this.turtle.move(200);
                 this.turtle.turn(180);
-                this.turtle.show();
+                // this.turtle.show();
                 this.drawTree(150, this.tree.depth);
             },
 
