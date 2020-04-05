@@ -2,14 +2,14 @@
 export type Point = [number, number];
 
 export interface Painter {
-    moveTo(x: number, y: number): void;
-    lineTo(x: number, y: number): void;
+    lineTo(x1: number, y1: number, x2: number, y2: number, color: string): void;
 }
 
 export class TurtleModel {
 
     private drawing = true;
     private position: Point;
+    private color = "#FFFFFF";
     private angle = 0;
 
     constructor(private painter: Painter,
@@ -20,7 +20,6 @@ export class TurtleModel {
 
     public reset(): void {
         this.position = this.start;
-        this.painter.moveTo(this.start[0], this.start[1])
         this.angle = 0;
     }
 
@@ -38,13 +37,16 @@ export class TurtleModel {
     }
 
     public move(distance: number) {
+        const [x, y] = this.position;
         const [nextX, nextY] = this.nextPosition(distance);
         if (this.drawing) {
-            this.painter.lineTo(nextX, nextY);
-        } else {
-            this.painter.moveTo(nextX, nextY);
+            this.painter.lineTo(x, y, nextX, nextY, this.color);
         }
         this.position = [nextX, nextY];
+    }
+
+    public setColor(color: string) {
+        this.color = color;
     }
 
     private nextPosition(distance: number): Point {

@@ -2,7 +2,8 @@
 <style lang="less" src="./turtle.less" scoped="scoped"/>
 <script lang="ts">
     import Vue from "vue";
-    import {Painter, Point, TurtleModel} from "./turtle.model";
+    import {Painter, TurtleModel} from "./turtle.model";
+    import { cloneDeep } from "lodash";
 
     const CANVAS_WIDTH = 1100;
     const CANVAS_HEIGHT = 900;
@@ -12,12 +13,13 @@
         constructor(private canvas: CanvasRenderingContext2D) {
         }
 
-        lineTo(x: number, y: number): void {
-            this.canvas.lineTo(x, y);
-        }
-
-        moveTo(x: number, y: number): void {
-            this.canvas.moveTo(x, y);
+        lineTo(x1: number, y1: number, x2: number, y2: number, color: string = "#FFFFFF"): void {
+            this.canvas.beginPath();
+            this.canvas.moveTo(x1, y1);
+            this.canvas.lineTo(x2, y2);
+            this.canvas.strokeStyle = color;
+            this.canvas.stroke();
+            this.canvas.closePath();
         }
     }
 
@@ -29,13 +31,22 @@
         grow2: number,
     }
 
+    const INITIAL_TREE: Tree = {
+        depth: 10,
+        angle1: 35,
+        angle2: -35,
+        grow1: 800,
+        grow2: 800,
+    };
+
     interface Data {
         canvas: CanvasRenderingContext2D,
         painter: CanvasPainter,
         turtle: TurtleModel,
         canvasWidth: number,
         canvasHeight: number,
-        tree: Tree
+        inputTree: Tree,
+        tree: Tree,
     }
 
     export default Vue.extend({
@@ -46,13 +57,8 @@
                 turtle: null,
                 canvasWidth: CANVAS_WIDTH,
                 canvasHeight: CANVAS_HEIGHT,
-                tree: {
-                    depth: 10,
-                    angle1: 35,
-                    angle2: -35,
-                    grow1: 800,
-                    grow2: 800,
-                }
+                inputTree: cloneDeep(INITIAL_TREE),
+                tree: cloneDeep(INITIAL_TREE),
             }
         },
         mounted(): void {
@@ -69,42 +75,56 @@
         },
         methods: {
 
+            getColorToneInHex(level: number, maxDepth: number): string {
+                const minFraction = 0.05;
+                const colorTone = Math.round(minFraction * 255.0 + (1 - minFraction) * 255.0 * (level / (maxDepth)));
+                const toneInHex = (colorTone < 16 ? '0' : '') + colorTone.toString(16).toUpperCase();
+                return `#${toneInHex}${toneInHex}${toneInHex}`;
+            },
+
+            recalculateParameters(): void {
+                this.tree.angle1 = Number(this.inputTree.angle1);
+                this.tree.angle2 = Number(this.inputTree.angle2);
+                this.tree.grow1 = Number(this.inputTree.grow1) / 1000;
+                this.tree.grow2 = Number(this.inputTree.grow2) / 1000;
+                this.tree.depth = Number(this.inputTree.depth);
+            },
+
             drawTree(size: number, level: number): void {
                 if (level == 0) {
                     return;
                 }
-                const angle1 = Number(this.tree.angle1);
-                const angle2 = Number(this.tree.angle2);
-                const grow1 = Number(this.tree.grow1) / 1000;
-                const grow2 = Number(this.tree.grow2) / 1000;
+                const color = this.getColorToneInHex(level, this.tree.depth);
                 this.turtle.move(size);
-                this.turtle.turn(angle1);
-                this.drawTree(grow1 * size, level - 1);
-                this.turtle.turn(-angle1);
-
-                this.turtle.turn(angle2);
-                this.drawTree(grow2 * size, level - 1);
-                this.turtle.turn(-angle2);
+                [
+                    [this.tree.angle1, this.tree.grow1],
+                    [this.tree.angle2, this.tree.grow2]
+                ].forEach(([angle, grow]) => {
+                    this.turtle.turn(angle);
+                    this.drawTree(grow * size, level - 1);
+                    this.turtle.turn(-angle);
+                });
+                this.turtle.setColor(color);
+                this.turtle.show();
                 this.turtle.move(-size);
+                this.turtle.hide();
             },
 
             drawTurtle(): void {
-
-                this.canvas.fillStyle = "#000000";
-                this.canvas.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
-                this.canvas.beginPath();
-
+                this.clearCanvas();
+                this.recalculateParameters();
                 this.turtle.reset();
                 this.turtle.hide();
                 this.turtle.turn(-90);
                 this.turtle.move(200);
                 this.turtle.turn(180);
                 this.turtle.show();
-                this.drawTree(150, Number(this.tree.depth));
+                this.drawTree(150, this.tree.depth);
+            },
 
-                this.canvas.strokeStyle = "#FFFF00";
-                this.canvas.stroke();
-                this.canvas.closePath();
+            clearCanvas: function () {
+                this.canvas.fillStyle = "#000000";
+                this.canvas.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
             }
         }
     })

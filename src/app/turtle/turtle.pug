@@ -7,14 +7,14 @@
                 min="-180"
                 max="180"
                 @input="drawTurtle"
-                v-model="tree.angle1"
+                v-model="inputTree.angle1"
             )
             input(
                 type="number"
                 min="-180"
                 max="180"
                 @input="drawTurtle"
-                v-model="tree.angle1"
+                v-model="inputTree.angle1"
             )
             span.angle1__label Angle 1
         .inputs__grow1.grow1
@@ -23,14 +23,14 @@
                 min="0"
                 max="1000"
                 @input="drawTurtle"
-                v-model="tree.grow1"
+                v-model="inputTree.grow1"
             )
             input(
                 type="number"
                 min="0"
                 max="1000"
                 @input="drawTurtle"
-                v-model="tree.grow1"
+                v-model="inputTree.grow1"
             )
             span.grow1__label Grow 1
         .inputs__angle2.angle2
@@ -39,14 +39,14 @@
                 min="-180"
                 max="180"
                 @input="drawTurtle"
-                v-model="tree.angle2"
+                v-model="inputTree.angle2"
             )
             input(
                 type="number"
                 min="-180"
                 max="180"
                 @input="drawTurtle"
-                v-model="tree.angle2"
+                v-model="inputTree.angle2"
             )
             span.angle2__label Angle 2
         .inputs__grow2.grow2
@@ -55,14 +55,14 @@
                 min="0"
                 max="1000"
                 @input="drawTurtle"
-                v-model="tree.grow2"
+                v-model="inputTree.grow2"
             )
             input(
                 type="number"
                 min="0"
                 max="1000"
                 @input="drawTurtle"
-                v-model="tree.grow2"
+                v-model="inputTree.grow2"
             )
             span.grow2__label Grow 2
         .inputs__depth.depth
@@ -71,13 +71,13 @@
                 min="0"
                 max="18"
                 @input="drawTurtle"
-                v-model="tree.depth"
+                v-model="inputTree.depth"
             )
             input(
                 type="number"
                 min="0"
                 max="18"
                 @input="drawTurtle"
-                v-model="tree.depth"
+                v-model="inputTree.depth"
             )
             span.depth__label Depth
