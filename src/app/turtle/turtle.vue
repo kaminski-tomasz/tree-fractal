@@ -74,7 +74,7 @@
         },
         methods: {
 
-            getColorToneInHex(level: number, maxDepth: number): string {
+            getColor(level: number, maxDepth: number): string {
                 const minFraction = 0.06;
                 const opacity = minFraction + (1 - minFraction) * (level / maxDepth);
                 return `rgba(255, 255, 255, ${opacity})`;
@@ -92,7 +92,7 @@
                 if (level == 0) {
                     return;
                 }
-                const color = this.getColorToneInHex(level, this.tree.depth);
+                const color = this.getColor(level, this.tree.depth);
                 this.turtle.move(size);
                 [
                     // Try this three branches
