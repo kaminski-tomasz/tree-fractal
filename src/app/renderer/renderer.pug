@@ -1,0 +1,47 @@
+.renderer
+    canvas#canvas.renderer__canvas(:width="canvasWidth" :height="canvasHeight")
+    .renderer__inputs.inputs
+        .inputs__side-length.side-length
+            input.side-length__input(
+                type="range"
+                min="0"
+                max="10000"
+                @input="drawSierpinskyTriangle"
+                v-model="sideLength"
+            )
+            input(
+                type="number"
+                min="0"
+                max="1000"
+                v-model="sideLength"
+                @input="drawSierpinskyTriangle"
+            )
+            span.side-length__label Side length
+
+        .inputs__bend.bend
+            input.bend__input(
+                type="range"
+                min="-1000"
+                max="1000"
+                v-model="bend"
+                @input="drawSierpinskyTriangle"
+            )
+            span.bend__label Trangle bend {{bend}}
+        .inputs__height.height
+            input.height__input(
+                type="range"
+                min="-1000"
+                max="1000"
+                v-model="height"
+                @input="drawSierpinskyTriangle"
+            )
+            span.height__label Trangle height: {{Math.floor(height)}}
+        .inputs__depth.depth
+            input.depth__input(
+                type="range"
+                min="1"
+                max="10"
+                v-model="depth"
+                @input="drawSierpinskyTriangle"
+            )
+            span.depth__label Recursion depth: {{depth}}
