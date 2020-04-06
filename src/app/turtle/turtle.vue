@@ -106,6 +106,8 @@
                     this.drawTree(grow * size, level - 1);
                     this.turtle.turn(-angle);
                 });
+
+                this.canvas.lineWidth = 10 * level / this.tree.depth;
                 this.turtle.setColor(color);
                 this.turtle.show();
                 this.turtle.move(-size);
