@@ -80,6 +80,10 @@ module.exports = function (env) {
                         }
                     }
                 },
+                {
+                    test: /\.worker\.js$/,
+                    use: { loader: 'worker-loader' }
+                }
             ]
         },
         performance: {
