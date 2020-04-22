@@ -3,13 +3,13 @@
 <script lang="ts">
     import Vue from "vue";
     import {cloneDeep} from "lodash";
-    import TreeWorker from "worker-loader!./tree.worker";
-    import {Tree} from "./tree";
+    import TreeWorker from "worker-loader!./tree-fractal.worker";
+    import {TreeModel} from "./tree-model";
 
     const CANVAS_WIDTH = 1100;
     const CANVAS_HEIGHT = 900;
 
-    const INITIAL_TREE: Tree = {
+    const INITIAL_TREE: TreeModel = {
         depth: 10,
         angle1: 35,
         angle2: -35,
@@ -20,8 +20,8 @@
     interface Data {
         canvasWidth: number,
         canvasHeight: number,
-        inputTree: Tree,
-        tree: Tree,
+        inputTree: TreeModel,
+        tree: TreeModel,
         treeWorker: TreeWorker
         isDrawing: boolean;
         shouldRedraw: boolean;
@@ -60,7 +60,6 @@
             }, [offscreenCanvas]);
         },
         methods: {
-
             recalculateParameters(): void {
                 this.tree.angle1 = Number(this.inputTree.angle1);
                 this.tree.angle2 = Number(this.inputTree.angle2);
@@ -68,11 +67,9 @@
                 this.tree.grow2 = Number(this.inputTree.grow2) / 1000;
                 this.tree.depth = Number(this.inputTree.depth);
             },
-
             drawingStarted() {
                 this.isDrawing = true;
             },
-
             drawingFinished() {
                 this.isDrawing = false;
                 if (this.shouldRedraw) {
@@ -80,16 +77,13 @@
                     this.sendDrawRequest();
                 }
             },
-
             scheduleDraw() {
                 this.shouldRedraw = true;
             },
-
             sendDrawRequest() {
                 this.drawingStarted();
                 this.treeWorker.postMessage({msg: 'draw', tree: this.tree});
             },
-
             repaintFractal(): void {
                 this.recalculateParameters();
                 if (!this.isDrawing) {

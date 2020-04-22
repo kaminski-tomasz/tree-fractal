@@ -1,5 +1,5 @@
 
-export interface Tree {
+export interface TreeModel {
     depth: number,
     angle1: number,
     angle2: number,

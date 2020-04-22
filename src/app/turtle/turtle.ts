@@ -1,20 +1,24 @@
 
 export type Point = [number, number];
 
-export interface Painter {
-    lineTo(x1: number, y1: number, x2: number, y2: number, color: string): void;
+export interface ScreenPainter {
+
+    clearScreen(color: string): void;
+
+    setLineWidth(width: number): void;
+
+    drawLine(x1: number, y1: number, x2: number, y2: number, color: string): void;
 }
 
-export class TurtleModel {
+export class Turtle {
 
     private drawing = true;
     private position: Point;
     private color = "#FFFFFF";
     private angle = 0;
 
-    constructor(private painter: Painter,
+    constructor(private painter: ScreenPainter,
                 private start: Point) {
-        this.position = start;
         this.reset();
     }
 
@@ -40,13 +44,21 @@ export class TurtleModel {
         const [x, y] = this.position;
         const [nextX, nextY] = this.nextPosition(distance);
         if (this.drawing) {
-            this.painter.lineTo(x, y, nextX, nextY, this.color);
+            this.painter.drawLine(x, y, nextX, nextY, this.color);
         }
         this.position = [nextX, nextY];
     }
 
     public setColor(color: string) {
         this.color = color;
+    }
+
+    public setLineWidth(width: number): void {
+        this.painter.setLineWidth(width);
+    }
+
+    public clear(color: string = "#000000"): void {
+        this.painter.clearScreen(color);
     }
 
     private nextPosition(distance: number): Point {
