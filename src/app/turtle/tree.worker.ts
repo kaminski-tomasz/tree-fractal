@@ -21,7 +21,8 @@ class TreeFractalWorker {
 
     constructor(private canvas: CanvasRenderingContext2D,
                 private canvasWidth: number,
-                private canvasHeight: number) {
+                private canvasHeight: number,
+                private drawFinished: () => void) {
         this.painter = new CanvasPainter(this.canvas);
         this.turtle = new TurtleModel(
             this.painter, [
@@ -65,6 +66,7 @@ class TreeFractalWorker {
         this.turtle.move(200);
         this.turtle.turn(180);
         this.drawTree(tree, 150, tree.depth);
+        this.drawFinished();
     }
 
     getColor(level: number, maxDepth: number): string {
@@ -92,7 +94,8 @@ class TreeFractalWorker {
                 treeFractalWorker = new TreeFractalWorker(
                     e.data.canvas.getContext('2d'),
                     e.data.canvas.width,
-                    e.data.canvas.height
+                    e.data.canvas.height,
+                    () => { ctx.postMessage({ msg: 'finished'}); }
                 );
                 treeFractalWorker.draw(e.data.tree);
                 break;
@@ -100,7 +103,7 @@ class TreeFractalWorker {
                 if (!treeFractalWorker) {
                     return;
                 }
-                treeFractalWorker.draw(e.data.tree);
+                requestAnimationFrame(() => { treeFractalWorker.draw(e.data.tree); });
                 break;
         }
     });
