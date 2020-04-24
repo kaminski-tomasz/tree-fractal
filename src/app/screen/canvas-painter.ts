@@ -2,9 +2,15 @@ import {ScreenPainter} from "./screen-painter";
 
 export class CanvasPainter implements ScreenPainter {
 
-    constructor(private canvasCtx: CanvasRenderingContext2D,
+    constructor(private canvasCtx: OffscreenCanvasRenderingContext2D,
                 private canvasWidth: number,
                 private canvasHeight: number) {
+    }
+
+    resize(canvasWidth: number,
+           canvasHeight: number) {
+        this.canvasWidth = canvasWidth;
+        this.canvasHeight = canvasHeight;
     }
 
     drawLine(x1: number, y1: number, x2: number, y2: number, color: string = "#FFFFFF"): void {

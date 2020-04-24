@@ -1,3 +1,4 @@
+
 .tree-fractal {
   color: white;
   width: 100%;
@@ -36,42 +37,42 @@ input[type=range] {
   -webkit-appearance: none;
   width: 100%;
   background: transparent;
-}
 
-input[type=range]:focus {
-  outline: none;
-}
+  &:focus {
+    outline: none;
+  }
 
-input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  border: 5px solid black;
-  height: 30px;
-  width: 30px;
-  border-radius: 15px;
-  background: white;
-  cursor: pointer;
-  margin-top: -12px;
-}
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border: 5px solid black;
+    height: 30px;
+    width: 30px;
+    border-radius: 15px;
+    background: white;
+    cursor: pointer;
+    margin-top: -12px;
+  }
 
-input[type=range]::-webkit-slider-runnable-track {
-  width: 100%;
-  height: 10px;
-  cursor: pointer;
-  background: #cccccc;
-}
+  &::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 10px;
+    cursor: pointer;
+    background: #cccccc;
+  }
 
-input[type=range]::-moz-range-thumb {
-  border: 5px solid black;
-  height: 20px;
-  width: 20px;
-  border-radius: 15px;
-  background: #ffffff;
-  cursor: pointer;
-}
+  &::-moz-range-thumb {
+    border: 5px solid black;
+    height: 20px;
+    width: 20px;
+    border-radius: 15px;
+    background: #ffffff;
+    cursor: pointer;
+  }
 
-input[type=range]::-moz-range-track {
-  width: 100%;
-  height: 10px;
-  cursor: pointer;
-  background: #cccccc;
+  &::-moz-range-track {
+    width: 100%;
+    height: 10px;
+    cursor: pointer;
+    background: #cccccc;
+  }
 }

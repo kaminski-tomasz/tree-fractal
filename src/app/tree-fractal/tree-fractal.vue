@@ -10,6 +10,7 @@
     const CANVAS_HEIGHT = 900;
 
     const INITIAL_TREE: TreeModel = {
+        root: 1,
         depth: 10,
         angle1: 35,
         angle2: -35,
@@ -25,6 +26,7 @@
                 offscreenCanvas: null,
                 inputTree: {
                     ...INITIAL_TREE,
+                    root: INITIAL_TREE.root * 100,
                     grow1: INITIAL_TREE.grow1 * 1000,
                     grow2: INITIAL_TREE.grow2 * 1000
                 },
@@ -51,7 +53,7 @@
             }, [this.offscreenCanvas]);
             // TODO resizing canvas
             window.addEventListener('resize', () => {
-                this.resizeCanvas();
+                this.repaintFractal();
             });
         },
         methods: {
@@ -67,6 +69,7 @@
                 });
             },
             recalculateParameters(): void {
+                this.tree.root = Number(this.inputTree.root) / 100;
                 this.tree.angle1 = Number(this.inputTree.angle1);
                 this.tree.angle2 = Number(this.inputTree.angle2);
                 this.tree.grow1 = Number(this.inputTree.grow1) / 1000;
@@ -88,7 +91,12 @@
             },
             sendDrawRequest() {
                 this.drawingStarted();
-                this.treeWorker.postMessage({msg: 'draw', tree: this.tree});
+                this.treeWorker.postMessage({
+                    msg: 'draw',
+                    tree: this.tree,
+                    width: window.innerWidth - 7,
+                    height: window.innerHeight - 7
+                });
             },
             repaintFractal(): void {
                 this.recalculateParameters();

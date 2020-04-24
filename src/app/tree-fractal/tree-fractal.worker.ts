@@ -4,11 +4,9 @@ import {CanvasPainter} from "../screen/canvas-painter";
 
 class TreeFractalWorker {
     private readonly ctx: Worker = self as any;
+    private canvasPainter: CanvasPainter;
     private treeFractal: TreeFractal;
     private canvas: OffscreenCanvas;
-    private canvasCtx: CanvasRenderingContext2D;
-    private canvasWidth: number;
-    private canvasHeight: number;
 
     constructor() {
         this.ctx.addEventListener('message', (event: MessageEvent) => {
@@ -33,39 +31,54 @@ class TreeFractalWorker {
     }
 
     private initTreeFractal(event: MessageEvent) {
-        this.getCanvasContextFrom(event);
+        this.getCanvas(event);
+        this.createCanvasPainter();
         this.createTreeFractal();
         this.drawTreeFractal(event);
     }
 
-    private getCanvasContextFrom(event: MessageEvent) {
+    private getCanvas(event: MessageEvent) {
         this.canvas = event.data.canvas;
-        this.canvasCtx = event.data.canvas.getContext('2d');
-        this.canvasWidth = event.data.canvas.width;
-        this.canvasHeight = event.data.canvas.height;
+        if (event.data.width && event.data.height) {
+            this.resizeCanvas(event.data.width, event.data.height);
+        }
+    }
+
+    private resizeCanvas(width: number, height: number): void {
+        if (this.canvas.width !== width ||
+            this.canvas.height!== height) {
+            this.canvas.width = width;
+            this.canvas.height = height;
+        }
     }
 
     private drawTreeFractal(event: MessageEvent): void {
         const tree: TreeModel = event.data.tree;
         if (this.treeFractal) {
+            const [width, height] = [event.data.width, event.data.height];
+            if (width && height) {
+                this.resizeCanvas(width, height);
+                this.treeFractal.resize(width, height);
+                this.canvasPainter.resize(width, height);
+            }
             requestAnimationFrame(() => this.treeFractal.draw(tree));
         }
     }
 
     private createTreeFractal(): void {
         this.treeFractal = new TreeFractal(
-            this.createCanvasPainter(),
-            this.canvasWidth,
-            this.canvasHeight,
+            this.canvasPainter,
+            this.canvas.width,
+            this.canvas.height,
             () => this.notifyDrawingFinished()
         );
     }
 
-    private createCanvasPainter(): CanvasPainter {
-        return new CanvasPainter(
-            this.canvasCtx,
-            this.canvasWidth,
-            this.canvasHeight
+    private createCanvasPainter(): void {
+        this.canvasPainter = new CanvasPainter(
+            this.canvas.getContext('2d'),
+            this.canvas.width,
+            this.canvas.height
         );
     }
 

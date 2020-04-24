@@ -2,6 +2,15 @@
     canvas#tree-fractal__canvas.tree-fractal__canvas(:width="canvasWidth" :height="canvasHeight")
     .tree-fractal__inputs.inputs
         .inputs__range-row
+            .label Root scale: {{ inputTree.root }} %
+            input.input(
+                type="range"
+                min="0"
+                max="300"
+                @input="repaintFractal"
+                v-model="inputTree.root"
+            )
+        .inputs__range-row
             .label L-branch angle: {{ tree.angle1 }} &#x00b0;
             input.input(
                 type="range"

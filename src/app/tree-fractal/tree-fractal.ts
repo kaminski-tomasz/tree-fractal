@@ -18,11 +18,26 @@ export class TreeFractal {
             ]);
     }
 
+    resize(screenWidth: number, screenHeight: number) {
+        this.screenWidth = screenWidth;
+        this.screenHeight = screenHeight;
+        this.turtle = this.createTurtle();
+    }
+
     draw(tree: TreeModel) {
         this.setModel(tree);
-        this.resetScreen();
-        this.drawTree(150, tree.depth);
+        this.clearScreen();
+        this.resetTurtle();
+        this.drawTree(this.getInitialSize() * tree.root, tree.depth);
         this.drawFinished();
+    }
+
+    private createTurtle() {
+        return new Turtle(
+            this.screenPainter, [
+                this.screenWidth / 3,
+                this.screenHeight / 2 + this.getInitialSize()
+            ]);
     }
 
     private setModel(tree: TreeModel) {
