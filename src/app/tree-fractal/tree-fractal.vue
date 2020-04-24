@@ -1,5 +1,5 @@
-<template lang="pug" src="./turtle.pug"/>
-<style lang="less" src="./turtle.less" scoped="scoped"/>
+<template lang="pug" src="./tree-fractal.pug"/>
+<style lang="less" src="./tree-fractal.less" scoped="scoped"/>
 <script lang="ts">
     import Vue from "vue";
     import {cloneDeep} from "lodash";
@@ -17,21 +17,12 @@
         grow2: 0.8,
     };
 
-    interface Data {
-        canvasWidth: number,
-        canvasHeight: number,
-        inputTree: TreeModel,
-        tree: TreeModel,
-        treeWorker: TreeWorker
-        isDrawing: boolean;
-        shouldRedraw: boolean;
-    }
-
     export default Vue.extend({
-        data(): Data {
+        data(): any {
             return {
                 canvasWidth: CANVAS_WIDTH,
                 canvasHeight: CANVAS_HEIGHT,
+                offscreenCanvas: null,
                 inputTree: {
                     ...INITIAL_TREE,
                     grow1: INITIAL_TREE.grow1 * 1000,
@@ -45,8 +36,8 @@
         },
 
         mounted(): void {
-            const canvasElement = document.getElementById("canvas") as HTMLCanvasElement;
-            const offscreenCanvas: OffscreenCanvas = canvasElement.transferControlToOffscreen();
+            const canvasElement = document.getElementById("tree-fractal__canvas") as HTMLCanvasElement;
+            this.offscreenCanvas = canvasElement.transferControlToOffscreen();
             this.treeWorker = new TreeWorker();
             this.treeWorker.addEventListener('message', (e: MessageEvent) => {
                 if (e.data.msg === 'finished') {
@@ -55,11 +46,26 @@
             });
             this.treeWorker.postMessage({
                 msg: 'init',
-                canvas: offscreenCanvas,
+                canvas: this.offscreenCanvas,
                 tree: this.tree
-            }, [offscreenCanvas]);
+            }, [this.offscreenCanvas]);
+            // TODO resizing canvas
+            window.addEventListener('resize', () => {
+                this.resizeCanvas();
+            });
         },
         methods: {
+            resizeCanvas() {
+                // TODO resizing canvas
+                // this.canvasHeight  = window.innerHeight * 0.8;
+                // this.canvasWidth  = window.innerWidth * 0.6;
+                this.treeWorker.postMessage({
+                    msg: 'resize',
+                    tree: this.tree,
+                    width: window.innerWidth * 0.6,
+                    height: window.innerHeight * 0.8
+                });
+            },
             recalculateParameters(): void {
                 this.tree.angle1 = Number(this.inputTree.angle1);
                 this.tree.angle2 = Number(this.inputTree.angle2);

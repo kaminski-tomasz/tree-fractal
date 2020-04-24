@@ -1,9 +1,9 @@
 import Vue from 'vue';
-import App from './app/app.vue';
+import TreeFractalComponent from './tree-fractal/tree-fractal.vue';
 
 new Vue({
     el: "#app",
     components: {
-        'fractal-app' : App
+        'tree-fractal' : TreeFractalComponent
     },
 });

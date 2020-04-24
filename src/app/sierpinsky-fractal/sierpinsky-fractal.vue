@@ -1,5 +1,5 @@
-<template lang="pug" src="./renderer.pug"/>
-<style lang="less" src="./renderer.less" scoped="scoped"/>
+<template lang="pug" src="./sierpinsky-fractal.pug"/>
+<style lang="less" src="./sierpinsky-fractal.less" scoped="scoped"/>
 <script lang="ts">
     import Vue from "vue";
 

@@ -1,4 +1,4 @@
-import {ScreenPainter} from "./turtle";
+import {ScreenPainter} from "./screen-painter";
 
 export class CanvasPainter implements ScreenPainter {
 

@@ -1,10 +1,11 @@
 import {TreeModel} from "./tree-model";
 import {TreeFractal} from "./tree-fractal";
-import {CanvasPainter} from "./canvas-painter";
+import {CanvasPainter} from "../screen/canvas-painter";
 
 class TreeFractalWorker {
     private readonly ctx: Worker = self as any;
     private treeFractal: TreeFractal;
+    private canvas: OffscreenCanvas;
     private canvasCtx: CanvasRenderingContext2D;
     private canvasWidth: number;
     private canvasHeight: number;
@@ -18,6 +19,15 @@ class TreeFractalWorker {
                 case 'draw':
                     this.drawTreeFractal(event);
                     break;
+                case 'resize':
+                    // TODO resizing canvas
+                    // this.canvasWidth = event.data.width;
+                    // this.canvasHeight = event.data.height;
+                    // this.canvas.width = this.canvasWidth;
+                    // this.canvas.height = this.canvasHeight;
+                    // this.createTreeFractal();
+                    // this.drawTreeFractal(event);
+                    break;
             }
         });
     }
@@ -29,6 +39,7 @@ class TreeFractalWorker {
     }
 
     private getCanvasContextFrom(event: MessageEvent) {
+        this.canvas = event.data.canvas;
         this.canvasCtx = event.data.canvas.getContext('2d');
         this.canvasWidth = event.data.canvas.width;
         this.canvasHeight = event.data.canvas.height;

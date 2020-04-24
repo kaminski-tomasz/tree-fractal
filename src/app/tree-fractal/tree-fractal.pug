@@ -1,0 +1,48 @@
+.tree-fractal
+    canvas#tree-fractal__canvas.tree-fractal__canvas(:width="canvasWidth" :height="canvasHeight")
+    .tree-fractal__inputs.inputs
+        .inputs__range-row
+            .label L-branch angle: {{ tree.angle1 }} &#x00b0;
+            input.input(
+                type="range"
+                min="-180"
+                max="180"
+                @input="repaintFractal"
+                v-model="inputTree.angle1"
+            )
+        .inputs__range-row
+            .label L-branch grow factor: {{ tree.grow1 }}
+            input.input(
+                type="range"
+                min="0"
+                max="1000"
+                @input="repaintFractal"
+                v-model="inputTree.grow1"
+            )
+        .inputs__range-row
+            .label R-branch angle: {{ tree.angle2 }} &#x00b0;
+            input.input(
+                type="range"
+                min="-180"
+                max="180"
+                @input="repaintFractal"
+                v-model="inputTree.angle2"
+            )
+        .inputs__range-row
+            .label R-branch grow factor: {{ tree.grow2 }}
+            input.input(
+                type="range"
+                min="0"
+                max="1000"
+                @input="repaintFractal"
+                v-model="inputTree.grow2"
+            )
+        .inputs__range-row
+            .label Recursion depth: {{ tree.depth }}
+            input.input(
+                type="range"
+                min="0"
+                max="18"
+                @input="repaintFractal"
+                v-model="inputTree.depth"
+            )

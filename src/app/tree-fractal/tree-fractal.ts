@@ -1,5 +1,6 @@
-import {ScreenPainter, Turtle} from "./turtle";
+import {Turtle} from "../turtle/turtle";
 import {TreeModel} from "./tree-model";
+import {ScreenPainter} from "../screen/screen-painter";
 
 export class TreeFractal {
     private readonly vOffset = 100;
