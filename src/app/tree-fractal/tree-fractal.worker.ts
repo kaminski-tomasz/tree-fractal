@@ -17,15 +17,6 @@ class TreeFractalWorker {
                 case 'draw':
                     this.drawTreeFractal(event);
                     break;
-                case 'resize':
-                    // TODO resizing canvas
-                    // this.canvasWidth = event.data.width;
-                    // this.canvasHeight = event.data.height;
-                    // this.canvas.width = this.canvasWidth;
-                    // this.canvas.height = this.canvasHeight;
-                    // this.createTreeFractal();
-                    // this.drawTreeFractal(event);
-                    break;
             }
         });
     }

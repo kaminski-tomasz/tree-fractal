@@ -3,7 +3,6 @@ import {TreeModel} from "./tree-model";
 import {ScreenPainter} from "../screen/screen-painter";
 
 export class TreeFractal {
-    private readonly vOffset = 100;
     private turtle: Turtle;
     private tree: TreeModel;
 
@@ -11,11 +10,7 @@ export class TreeFractal {
                 private screenWidth: number,
                 private screenHeight: number,
                 private drawFinished = () => {}) {
-        this.turtle = new Turtle(
-            this.screenPainter, [
-                screenWidth / 2,
-                screenHeight / 2 + this.vOffset
-            ]);
+        this.turtle = this.createTurtle();
     }
 
     resize(screenWidth: number, screenHeight: number) {
@@ -57,7 +52,8 @@ export class TreeFractal {
     }
 
     private setBranchWidth(level: number): void {
-        const width = 10 * level / this.tree.depth;
+        const maxWidth = Math.min(10, this.getInitialSize() / 15);
+        const width = maxWidth * level / this.tree.depth;
         this.turtle.setLineWidth(width);
     }
 
@@ -79,12 +75,19 @@ export class TreeFractal {
         });
     }
 
-    private resetScreen(): void {
+    private getInitialSize() {
+        return this.screenHeight / 6;
+    }
+
+    private clearScreen(): void {
         this.turtle.clear();
+    }
+
+    private resetTurtle(): void {
         this.turtle.reset();
         this.turtle.hide();
         this.turtle.turn(-90);
-        this.turtle.move(200);
+        this.turtle.move(this.getInitialSize() * this.tree.root);
         this.turtle.turn(180);
     }
 }

@@ -6,8 +6,8 @@
     import TreeWorker from "worker-loader!./tree-fractal.worker";
     import {TreeModel} from "./tree-model";
 
-    const CANVAS_WIDTH = 1100;
-    const CANVAS_HEIGHT = 900;
+    const CANVAS_WIDTH = window.innerWidth - 7;
+    const CANVAS_HEIGHT = window.innerHeight - 7;
 
     const INITIAL_TREE: TreeModel = {
         root: 1,
@@ -51,23 +51,11 @@
                 canvas: this.offscreenCanvas,
                 tree: this.tree
             }, [this.offscreenCanvas]);
-            // TODO resizing canvas
             window.addEventListener('resize', () => {
                 this.repaintFractal();
             });
         },
         methods: {
-            resizeCanvas() {
-                // TODO resizing canvas
-                // this.canvasHeight  = window.innerHeight * 0.8;
-                // this.canvasWidth  = window.innerWidth * 0.6;
-                this.treeWorker.postMessage({
-                    msg: 'resize',
-                    tree: this.tree,
-                    width: window.innerWidth * 0.6,
-                    height: window.innerHeight * 0.8
-                });
-            },
             recalculateParameters(): void {
                 this.tree.root = Number(this.inputTree.root) / 100;
                 this.tree.angle1 = Number(this.inputTree.angle1);
